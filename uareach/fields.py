@@ -134,7 +134,7 @@ class Field(collections.MutableMapping):
             raise ValueError('Must set field name.')
         self.name = name
         self.field_values = {}
-        for key, val in kwargs.iteritems():
+        for key, val in kwargs.items():
             self[key] = val
 
     # Serialization / Deserialization methods for Apple & Google
@@ -262,7 +262,7 @@ class Field(collections.MutableMapping):
             return self.field_values
 
         payload = {}
-        for key, value in self.field_values.iteritems():
+        for key, value in self.field_values.items():
             if key == 'label':
                 payload[self.GOOGLE_LABEL_MAP[self['fieldType']]] = value
             elif key == 'value':

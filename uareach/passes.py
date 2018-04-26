@@ -50,7 +50,7 @@ def _pass_dispatch(data):
     """Infer the pass vendor based on field type.
     """
     fields = data.get('fields')
-    for name, field_data in fields.iteritems():
+    for name, field_data in fields.items():
         field_type = field_data['fieldType']
         if field_type == 'notAssigned':
             continue
@@ -262,7 +262,7 @@ class PassList(common.IteratorParent):
             'direction': direction
         }
 
-        params = {k: v for k, v in params.iteritems() if v is not None}
+        params = {k: v for k, v in params.items() if v is not None}
         super(PassList, self).__init__(reach, params)
 
 
@@ -393,17 +393,17 @@ class Pass(Template):
     def view(self):
         payload = super(Pass, self)._create_payload()
         payload['fields'] = {}
-        for name, field in self.fields.iteritems():
+        for name, field in self.fields.items():
             payload['fields'][name] = field.build_pass_json()
-        for name, item in self.metadata.iteritems():
+        for name, item in self.metadata.items():
             payload[name] = item
-        return {key: val for key, val in payload.iteritems() if val}
+        return {key: val for key, val in payload.items() if val}
 
     def _create_payload(self):
         payload = self.view()
         payload.get('publicUrl', {}).pop('path', None)
         payload.get('publicUrl', {}).pop('image', None)
-        return {key: val for key, val in payload.iteritems() if
+        return {key: val for key, val in payload.items() if
                 key not in self.READ_ONLY_METADATA}
 
     def _add_metadata_helper(self, name, value):
@@ -499,7 +499,7 @@ class ApplePass(Pass):
         pass_ = super(ApplePass, cls).from_data(data)
         pass_._apple_features.beacons = data.pop('beacons', [])
         fields = data.pop('fields', {})
-        for name, json_field in fields.iteritems():
+        for name, json_field in fields.items():
             pass_.fields[name] = ua.Field.build_apple_field(
                 name, json_field
             )
@@ -509,7 +509,7 @@ class ApplePass(Pass):
         payload = super(ApplePass, self).view()
         payload['beacons'] = self._apple_features.beacons
         payload.update(self.metadata)
-        return {key: val for key, val in payload.iteritems() if val}
+        return {key: val for key, val in payload.items() if val}
 
     def set_expiration(self, date):
         date_str = date.strftime('%Y-%m-%dT%H:%M')
@@ -538,7 +538,7 @@ class GooglePass(Pass):
     @classmethod
     def from_data(cls, data):
         pass_ = super(GooglePass, cls).from_data(data)
-        for name, field in data.pop('fields', {}).iteritems():
+        for name, field in data.pop('fields', {}).items():
             if name == 'image':
                 pass_._google_features.top_level_fields['image'] = field
             elif name == ua.GoogleFieldType._IMAGE_MODULE:

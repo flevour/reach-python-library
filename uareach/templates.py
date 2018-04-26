@@ -434,7 +434,7 @@ class TemplateList(common.IteratorParent):
             'order': order,
             'direction': direction
         }
-        params = {k: v for k, v in params.iteritems() if v is not None}
+        params = {k: v for k, v in params.items() if v is not None}
         super(TemplateList, self).__init__(reach, params)
 
 
@@ -682,7 +682,7 @@ class Template(object):
             ...     pass_id=12345
             ... )
         """
-        for header, value in kwargs.iteritems():
+        for header, value in kwargs.items():
             self.METADATA.validate(header)
             self._add_metadata_helper(header, value)
 
@@ -791,7 +791,7 @@ class Template(object):
             ...     logo_image='https://google.com/fun.png'
             ... )
         """
-        for header, value in kwargs.iteritems():
+        for header, value in kwargs.items():
             self.add_header(header, value)
 
     def remove_headers(self, *args):
@@ -843,9 +843,9 @@ class Template(object):
         and handles formatting differences between Apple and Google.
         """
         payload = {'headers': {}}
-        for key, val in self.headers.iteritems():
+        for key, val in self.headers.items():
             payload['headers'][key] = val
-        for key, val in self.metadata.iteritems():
+        for key, val in self.metadata.items():
             if key not in self.READ_ONLY_METADATA:
                 payload[key] = val
         return payload
@@ -882,7 +882,7 @@ class AppleTemplate(Template):
     def from_data(cls, data):
         template = super(AppleTemplate, cls).from_data(data)
         fields = data.get('fieldsModel', {}).get('fields', {})
-        for name, json_field in fields.iteritems():
+        for name, json_field in fields.items():
             template.fields[name] = wf.Field.build_apple_field(
                 name, json_field
             )
@@ -892,7 +892,7 @@ class AppleTemplate(Template):
     def view(self):
         payload = super(AppleTemplate, self).view()
         payload.update({'fields': {}, 'beacons': []})
-        for name, field in self.fields.iteritems():
+        for name, field in self.fields.items():
             field._build_common_template_json()
             payload['fields'][name] = field.build_apple_json()
         payload['beacons'] = self.beacons
@@ -917,7 +917,7 @@ class AppleTemplate(Template):
 
     def _create_payload(self):
         payload = self.view()
-        return {key: val for key, val in payload.iteritems() if
+        return {key: val for key, val in payload.items() if
                 key not in self.READ_ONLY_METADATA}
 
     def set_logo_image(self, value):
@@ -962,7 +962,7 @@ class AppleTemplate(Template):
         }
 
         self.beacons.append({
-            key: val for key, val in payload.iteritems() if val is not None
+            key: val for key, val in payload.items() if val is not None
         })
 
     def remove_beacon(self, uuid):
@@ -1009,7 +1009,7 @@ class GoogleTemplate(Template):
     def from_data(cls, data):
         template = super(GoogleTemplate, cls).from_data(data)
         modules = data.get('fieldsModel', {})
-        for field_type, module_data in modules.iteritems():
+        for field_type, module_data in modules.items():
             if field_type == 'vendor':
                 continue
             # Handling special modules
@@ -1034,7 +1034,7 @@ class GoogleTemplate(Template):
     def view(self):
         payload = super(GoogleTemplate, self).view()
         payload.update({'fields': {}, 'messages': []})
-        for name, field in self.fields.iteritems():
+        for name, field in self.fields.items():
             field._build_common_template_json()
             payload['fields'][name] = field.build_google_template_json()
         payload['top_level_fields'] = self.top_level_fields
@@ -1053,14 +1053,14 @@ class GoogleTemplate(Template):
             payload['type'] = TemplateType.LOYALTY
 
         # Handle standard fields
-        for name, field in self.fields.iteritems():
+        for name, field in self.fields.items():
             if not payload.get(field['fieldType']):
                 payload[field['fieldType']] = {}
             field._build_common_template_json()
             payload[field['fieldType']][field.name] = field.build_google_template_json()
 
         # Handle top-level fields
-        for field_type, fields in self.top_level_fields.iteritems():
+        for field_type, fields in self.top_level_fields.items():
             if not payload.get(field_type):
                 payload[field_type] = {}
             payload[field_type].update(fields)
@@ -1148,7 +1148,7 @@ class GoogleTemplate(Template):
 
         """
         wf.GoogleFieldType.validate(field_type, allow_private=True)
-        for key, val in kwargs.iteritems():
+        for key, val in kwargs.items():
             self.top_level_fields[field_type][key] = val
 
     def set_offer(
@@ -1192,7 +1192,7 @@ class GoogleTemplate(Template):
         }
         self.add_top_level_fields(
             wf.GoogleFieldType._OFFER_MODULE,
-            **{key: val for key, val in payload.iteritems() if val != None}
+            **{key: val for key, val in payload.items() if val != None}
         )
 
     def add_message(
@@ -1243,13 +1243,13 @@ class GoogleTemplate(Template):
             'endTime': endtime.strftime('%Y-%m-%dT%H:%M') if endtime else None
         }
         self.messages.append(
-            {key: val for key, val in payload.iteritems() if val != None}
+            {key: val for key, val in payload.items() if val != None}
         )
 
     def _process_module_data(self, field_type, module_data):
         """Handle each module (e.g. textModulesData, etc).
         """
-        for name, data in module_data.iteritems():
+        for name, data in module_data.items():
             if name in GoogleTemplate.RESERVED_NAMES.get(field_type, []):
                 self._handle_reserved_names(field_type, name, data)
             elif isinstance(data, dict):

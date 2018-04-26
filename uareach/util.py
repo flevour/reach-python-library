@@ -16,7 +16,7 @@ class Constant(object):
 
         class_dict = {
             (cls.__name__ + '.' + attr): val for
-            attr, val in cls.__dict__.iteritems() if
+            attr, val in cls.__dict__.items() if
             not callable(attr) and not attr.startswith(underscores)
             and not attr == 'KEY_CLASS'
         }
@@ -41,7 +41,7 @@ class Constant(object):
                     '-' * max(col1, 4),
                     '-' * max(col2, 20)
                 )
-                for key, val in class_dict.iteritems():
+                for key, val in class_dict.items():
                     table += row_format.format(key, val)
                 return "Valid options for '{}' are:\n\n{}".format(cls.__name__, table)
             row_format = '{:<' + str(col1) + '}\n'
