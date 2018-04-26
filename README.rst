@@ -1,7 +1,7 @@
 About
 =====
 
-The Urbanairship ``uareach`` (formerly known as ``wallet``) library is a Python library for
+The Urban Airship ``uareach`` (formerly known as ``wallet``) library is a Python library for
 using the `Urban Airship Reach <http://urbanairship.com/>`__ web service API.
 
 Version 0.1.0 is a beta release.  Please visit `Urban Airship Support
@@ -12,12 +12,18 @@ Requirements
 
 As of version 0.1.0, Python 2.7 is required.
 
-For tests, ``uareach`` also needs `Mock <https://github.com/testing-cabal/mock>`_.
-
-Running Tests
+Development
 =============
 
-To run tests, run:
+Install development dependencies:
+
+    $ pip install -r requirements.txt
+
+Install the library in editable mode:
+
+    $ pip install --editable .
+
+Run tests with:
 
     $ nosetests
 
