@@ -72,7 +72,7 @@ class PassApiTest(unittest.TestCase):
                 'value': locations[1],
                 'passLocationId': 312
             }
-        ])
+        ]).encode('utf-8')
         mock_request.return_value = response
 
         reach_response = ua.add_pass_locations(
@@ -136,7 +136,7 @@ class PassApiTest(unittest.TestCase):
             'templateId': '51234',
             'status': 'not_been_installed',
             'tags': []
-        })
+        }).encode('utf-8')
         response._content = pass_json
         mock_request.return_value = response
         pass_ = ua.get_pass(self.client, pass_id=12345)
@@ -204,7 +204,7 @@ class PassApiTest(unittest.TestCase):
                 "direction": "DESC",
                 "pageSize": 2
             }
-        })
+        }).encode('utf-8')
         response._content = pass_json
         mock_request.return_value = response
         listing_response = ua.PassList(self.client)
@@ -240,7 +240,7 @@ class PassTest(unittest.TestCase):
         response._content = json.dumps({
             'url': 'https://wallet-api.urbanairship.com/v1/pass/123456/download',
             'id': '12345678'
-        })
+        }).encode('utf-8')
         response.status_code = 200
         mock_request.return_value = response
         payload = self.pass_._create_payload()
@@ -259,7 +259,7 @@ class PassTest(unittest.TestCase):
     def test_update_pass(self, mock_request):
         response = requests.Response()
         response.status_code = 200
-        response._content = json.dumps({'ticketId': 12345678})
+        response._content = json.dumps({'ticketId': 12345678}).encode('utf-8')
         mock_request.return_value = response
         update_response = self.pass_.update(self.client, pass_id=12345)
 

@@ -58,7 +58,7 @@ class TemplateApiTest(unittest.TestCase):
                 'locationId': 231,
                 'fieldId': 312
             }
-        ])
+        ]).encode('utf-8')
         mock_request.return_value = response
 
         reach_response = ua.add_template_locations(
@@ -101,7 +101,7 @@ class TemplateApiTest(unittest.TestCase):
         response.status_code = 200
         response._content = json.dumps(
             {'templateId': 54321}
-        )
+        ).encode('utf-8')
         mock_request.return_value = response
         reach_response = ua.duplicate_template(self.client, template_id=12345)
         mock_request.assert_called_with(
@@ -142,7 +142,7 @@ class TemplateApiTest(unittest.TestCase):
                 'vendor': 'Apple',
                 'vendorId': 1
             }
-        })
+        }).encode('utf-8')
         response._content = template_json
         mock_request.return_value = response
         ua.get_template(self.client, template_id=12345)
@@ -186,7 +186,7 @@ class TemplateApiTest(unittest.TestCase):
                 'vendorId': 2,
                 'name': 'Test'
             }
-        })
+        }).encode('utf-8')
         response._content = template_json
         mock_request.return_value = response
         ua.get_template(self.client, template_id=67890)
@@ -242,7 +242,7 @@ class TemplateApiTest(unittest.TestCase):
                 'direction': 'DESC',
                 'pageSize': 10
             }
-        })
+        }).encode('utf-8')
         response._content = templates_json
         mock_request.return_value = response
         listing_response = ua.TemplateList(self.client)
@@ -560,7 +560,7 @@ class AppleTemplateTest(unittest.TestCase):
     @mock.patch.object(ua.Reach, '_request')
     def test_create_template(self, mock_request):
         response = requests.Response()
-        response._content = json.dumps({'templateId': 54123})
+        response._content = json.dumps({'templateId': 54123}).encode('utf-8')
         response.status_code = 200
         mock_request.return_value = response
 
@@ -634,7 +634,7 @@ class GoogleTemplateTest(unittest.TestCase):
     @mock.patch.object(ua.Reach, '_request')
     def test_create_template(self, mock_request):
         response = requests.Response()
-        response._content = json.dumps({'templateId': 54321})
+        response._content = json.dumps({'templateId': 54321}).encode('utf-8')
         response.status_code = 200
         mock_request.return_value = response
 
