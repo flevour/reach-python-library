@@ -4,6 +4,7 @@ import datetime
 import logging
 
 from six.moves.urllib import parse
+from six import string_types
 
 from uareach import util
 
@@ -350,7 +351,7 @@ class Field(collections.MutableMapping):
         """
         if isinstance(value, float) or isinstance(value, int):
             return NumberStyle.DECIMAL
-        elif isinstance(value, basestring):
+        elif isinstance(value, string_types):
             if 'E' in value or 'e' in value:
                 return NumberStyle.SCIENTIFIC
             return NumberStyle.TEXT
@@ -377,7 +378,7 @@ class Field(collections.MutableMapping):
             Should guess correctly in most cases, but formatType can always
             be overridden  by the user.
         """
-        if isinstance(value, basestring):
+        if isinstance(value, string_types):
             # Int/float values
             try:
                 int(value)

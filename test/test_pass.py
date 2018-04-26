@@ -209,7 +209,7 @@ class PassApiTest(unittest.TestCase):
         mock_request.return_value = response
         listing_response = ua.PassList(self.client)
         self.assertEqual(
-            listing_response.next()['id'],
+            next(listing_response)['id'],
             '12345'
         )
         mock_request.assert_called_with(

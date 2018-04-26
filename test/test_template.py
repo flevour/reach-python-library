@@ -247,7 +247,7 @@ class TemplateApiTest(unittest.TestCase):
         mock_request.return_value = response
         listing_response = ua.TemplateList(self.client)
         self.assertEqual(
-            listing_response.next()['id'],
+            next(listing_response)['id'],
             '23595'
         )
         mock_request.assert_called_with(

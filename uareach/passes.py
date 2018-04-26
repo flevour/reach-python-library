@@ -373,7 +373,7 @@ class Pass(Template):
         pass_.metadata = {}
         for key in data.keys():
             if key not in non_metadata_keys:
-                pass_.metadata[key] = data.pop(key)
+                pass_.metadata[key] = data.get(key)
 
         if pass_.metadata.get('templateId'):
             pass_.metadata[PassMetadata.TEMPLATE_ID] = pass_.metadata['templateId']
@@ -383,7 +383,7 @@ class Pass(Template):
             del pass_.metadata['id']
 
         # Handle headers
-        pass_.headers = data.pop('headers', {})
+        pass_.headers = data.get('headers', {})
         if pass_.headers.get(ua.TemplateHeader.BARCODE_TYPE):
             no_pk = pass_.headers[ua.TemplateHeader.BARCODE_TYPE]['value'].replace('PKB', 'B')
             pass_.headers[ua.TemplateHeader.BARCODE_TYPE]['value'] = no_pk

@@ -1,4 +1,5 @@
 import inspect
+import six
 import types
 
 import uareach as ua
@@ -19,6 +20,7 @@ class Constant(object):
             attr, val in cls.__dict__.items() if
             not callable(attr) and not attr.startswith(underscores)
             and not attr == 'KEY_CLASS'
+            and not hasattr(val, '__func__')
         }
 
         if item not in class_dict.values():
