@@ -10,6 +10,7 @@ from uareach import util
 
 logger = logging.getLogger(__name__)
 
+
 class FieldKey(util.Constant):
     KEY_CLASS = 'Field'
 

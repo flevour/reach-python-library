@@ -2,7 +2,7 @@ import json
 import logging
 from collections import defaultdict
 
-import common
+from uareach import common
 import uareach.fields as wf
 from uareach import util
 
