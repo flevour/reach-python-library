@@ -1,2 +1,4 @@
 mock
 nose
+requests>=2.7
+six
