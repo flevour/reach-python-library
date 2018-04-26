@@ -8,6 +8,7 @@ import requests
 import pass_builders
 import uareach as ua
 from uareach.passes import Pass
+from util import mock_request_assert_called_with
 
 
 class PassApiTest(unittest.TestCase):
@@ -23,7 +24,9 @@ class PassApiTest(unittest.TestCase):
         mock_request.return_value = response
 
         reach_response = ua.delete_pass(self.client, pass_id=12345)
-        mock_request.assert_called_with(
+        mock_request_assert_called_with(
+            self,
+            mock_request,
             'DELETE',
             None,
             ua.common.PASS_BASE_URL.format(12345),
@@ -59,9 +62,7 @@ class PassApiTest(unittest.TestCase):
                 "country": "US"
             }
         ]
-        body = json.dumps({
-            'locations': locations
-        })
+        body = {'locations': locations}
         response = requests.Response()
         response._content = json.dumps([
             {
@@ -78,7 +79,9 @@ class PassApiTest(unittest.TestCase):
         reach_response = ua.add_pass_locations(
             self.client, locations, pass_id=12345
         )
-        mock_request.assert_called_with(
+        mock_request_assert_called_with(
+            self,
+            mock_request,
             'POST',
             body,
             ua.common.PASS_ADD_LOCATION_URL.format(12345),
@@ -100,7 +103,9 @@ class PassApiTest(unittest.TestCase):
         reach_response = ua.delete_pass_location(
             self.client, 'location123', pass_id=12345
         )
-        mock_request.assert_called_with(
+        mock_request_assert_called_with(
+            self,
+            mock_request,
             'DELETE',
             None,
             ua.common.PASS_DELETE_LOCATION_URL.format(
@@ -140,7 +145,9 @@ class PassApiTest(unittest.TestCase):
         response._content = pass_json
         mock_request.return_value = response
         pass_ = ua.get_pass(self.client, pass_id=12345)
-        mock_request.assert_called_with(
+        mock_request_assert_called_with(
+            self,
+            mock_request,
             'GET',
             None,
             ua.common.PASS_BASE_URL.format(12345),
@@ -212,7 +219,9 @@ class PassApiTest(unittest.TestCase):
             next(listing_response)['id'],
             '12345'
         )
-        mock_request.assert_called_with(
+        mock_request_assert_called_with(
+            self,
+            mock_request,
             'GET',
             None,
             ua.common.PASS_BASE_URL.format(''),
@@ -245,9 +254,11 @@ class PassTest(unittest.TestCase):
         mock_request.return_value = response
         payload = self.pass_._create_payload()
         create_response = self.pass_.create(self.client, template_id=54321)
-        mock_request.assert_called_with(
+        mock_request_assert_called_with(
+            self,
+            mock_request,
             'POST',
-            json.dumps(payload),
+            payload,
             ua.common.PASS_BASE_URL.format(54321),
             'application/json',
             1.2,
@@ -263,9 +274,11 @@ class PassTest(unittest.TestCase):
         mock_request.return_value = response
         update_response = self.pass_.update(self.client, pass_id=12345)
 
-        mock_request.assert_called_with(
+        mock_request_assert_called_with(
+            self,
+            mock_request,
             'PUT',
-            json.dumps(self.pass_._create_payload()),
+            self.pass_._create_payload(),
             ua.common.PASS_BASE_URL.format(12345),
             'application/json',
             1.2,

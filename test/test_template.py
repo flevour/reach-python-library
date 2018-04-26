@@ -7,6 +7,7 @@ import unittest
 
 import uareach as ua
 from uareach import common
+from util import mock_request_assert_called_with
 from uareach.templates import Template
 from template_builders import build_apple_loyalty, build_google_loyalty
 
@@ -24,7 +25,9 @@ class TemplateApiTest(unittest.TestCase):
         mock_request.return_value = response
 
         reach_response = ua.delete_template(self.client, template_id=12345)
-        mock_request.assert_called_with(
+        mock_request_assert_called_with(
+            self,
+            mock_request,
             'DELETE',
             None,
             common.TEMPLATE_BASE_URL.format(12345),
@@ -48,9 +51,7 @@ class TemplateApiTest(unittest.TestCase):
             "regionCode": "94404",
             "country": "US"
         }
-        body = json.dumps({
-            'locations': [location]
-        })
+        body = {'locations': [location]}
         response = requests.Response()
         response._content = json.dumps([
             {
@@ -64,7 +65,9 @@ class TemplateApiTest(unittest.TestCase):
         reach_response = ua.add_template_locations(
             self.client, [location], template_id=12345
         )
-        mock_request.assert_called_with(
+        mock_request_assert_called_with(
+            self,
+            mock_request,
             'POST',
             body,
             ua.common.TEMPLATE_ADD_LOCATION_URL.format(12345),
@@ -85,7 +88,9 @@ class TemplateApiTest(unittest.TestCase):
         reach_response = ua.delete_template_location(
             self.client, 'location123', template_id=12345
         )
-        mock_request.assert_called_with(
+        mock_request_assert_called_with(
+            self,
+            mock_request,
             'DELETE',
             None,
             common.TEMPLATE_REMOVE_LOCATION_URL.format(12345, 'location123'),
@@ -104,7 +109,9 @@ class TemplateApiTest(unittest.TestCase):
         ).encode('utf-8')
         mock_request.return_value = response
         reach_response = ua.duplicate_template(self.client, template_id=12345)
-        mock_request.assert_called_with(
+        mock_request_assert_called_with(
+            self,
+            mock_request,
             'POST',
             None,
             ua.common.TEMPLATE_DUPLICATE_URL.format(12345),
@@ -146,7 +153,9 @@ class TemplateApiTest(unittest.TestCase):
         response._content = template_json
         mock_request.return_value = response
         ua.get_template(self.client, template_id=12345)
-        mock_request.assert_called_with(
+        mock_request_assert_called_with(
+            self,
+            mock_request,
             'GET',
             None,
             common.TEMPLATE_BASE_URL.format(12345),
@@ -190,7 +199,9 @@ class TemplateApiTest(unittest.TestCase):
         response._content = template_json
         mock_request.return_value = response
         ua.get_template(self.client, template_id=67890)
-        mock_request.assert_called_with(
+        mock_request_assert_called_with(
+            self,
+            mock_request,
             'GET',
             None,
             ua.common.TEMPLATE_BASE_URL.format(67890),
@@ -250,7 +261,9 @@ class TemplateApiTest(unittest.TestCase):
             next(listing_response)['id'],
             '23595'
         )
-        mock_request.assert_called_with(
+        mock_request_assert_called_with(
+            self,
+            mock_request,
             'GET',
             None,
             common.TEMPLATE_BASE_URL.format('headers'),
@@ -565,9 +578,11 @@ class AppleTemplateTest(unittest.TestCase):
         mock_request.return_value = response
 
         create_response = self.template.create(self.client, project_id=12345)
-        mock_request.assert_called_with(
+        mock_request_assert_called_with(
+            self,
+            mock_request,
             'POST',
-            json.dumps(self.template._create_payload()),
+            self.template._create_payload(),
             common.TEMPLATE_BASE_URL.format(12345),
             'application/json',
             1.2,
@@ -583,9 +598,11 @@ class AppleTemplateTest(unittest.TestCase):
         # self.template.add_metadata(id_=12345)
 
         update_response = self.template.update(self.client, template_id=12345)
-        mock_request.assert_called_with(
+        mock_request_assert_called_with(
+            self,
+            mock_request,
             'PUT',
-            json.dumps(self.template._create_payload()),
+            self.template._create_payload(),
             common.TEMPLATE_BASE_URL.format(12345),
             'application/json',
             1.2,
@@ -639,9 +656,11 @@ class GoogleTemplateTest(unittest.TestCase):
         mock_request.return_value = response
 
         create_response = self.template.create(self.client, project_id=12345)
-        mock_request.assert_called_with(
+        mock_request_assert_called_with(
+            self,
+            mock_request,
             'POST',
-            json.dumps(self.template._create_payload()),
+            self.template._create_payload(),
             common.TEMPLATE_BASE_URL.format(12345),
             'application/json',
             1.2,
@@ -657,9 +676,11 @@ class GoogleTemplateTest(unittest.TestCase):
         # self.template.add_metadata(id_=12345)
 
         update_response = self.template.update(self.client, template_id=54321)
-        mock_request.assert_called_with(
+        mock_request_assert_called_with(
+            self,
+            mock_request,
             'PUT',
-            json.dumps(self.template._create_payload()),
+            self.template._create_payload(),
             common.TEMPLATE_BASE_URL.format(54321),
             'application/json',
             1.2,
